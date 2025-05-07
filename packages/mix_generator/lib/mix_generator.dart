@@ -9,7 +9,7 @@ import 'src/mix_generator.dart';
 Builder mixGenerator(BuilderOptions options) {
   return PartBuilder(
     [MixGenerator()],
-    '.g.dart',
+    '.mix.dart',
     formatOutput: (code, version) {
       return DartFormatter(languageVersion: version).format(code);
     },
