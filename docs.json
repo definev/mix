@@ -6,16 +6,16 @@
       "group": "Widgets",
       "pages": [
         {
+          "title": "NakedAccordion",
+          "href": "/accordion"
+        },
+        {
           "title": "NakedButton",
           "href": "/button"
         },
         {
           "title": "NakedCheckbox",
           "href": "/checkbox"
-        },
-        {
-          "title": "NakedAccordion",
-          "href": "/accordion"
         },
         {
           "title": "NakedMenu",
@@ -26,12 +26,20 @@
           "href": "/radio_group"
         },
         {
+          "title": "NakedSelect",
+          "href": "/select"
+        },
+        {
           "title": "NakedSlider",
           "href": "/slider"
         },
         {
           "title": "NakedTabs",
           "href": "/tabs"
+        },
+        {
+          "title": "NakedTextField",
+          "href": "/textfield"
         },
         {
           "title": "NakedTooltip",
