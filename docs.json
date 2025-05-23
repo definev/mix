@@ -1,60 +1,60 @@
 {
-    "name": "naked",
-    "description": "A widget library providing unstyled, behavior-focused components for Flutter.",
-    "sidebar": [
-      {
-        "group": "Introduction",
-        "pages": [
-          {
-            "title": "Getting Started",
-            "href": "/"
-          }
-        ]
-      },
-      {
-        "group": "Widgets",
-        "pages": [
+  "name": "naked",
+  "description": "A widget library providing unstyled, behavior-focused components for Flutter.",
+  "sidebar": [
+    {
+      "group": "Introduction",
+      "pages": [
+        {
+          "title": "Getting Started",
+          "href": "/"
+        }
+      ]
+    },
+    {
+      "group": "Widgets",
+      "pages": [
         {
           "title": "NakedAccordion",
-          "href": "/accordion"
+          "href": "/naked/accordion"
         },
         {
           "title": "NakedButton",
-          "href": "/button"
+          "href": "/naked/button"
         },
         {
           "title": "NakedCheckbox",
-          "href": "/checkbox"
+          "href": "/naked/checkbox"
         },
         {
           "title": "NakedMenu",
-          "href": "/menu"
+          "href": "/naked/menu"
         },
         {
           "title": "NakedRadioGroup",
-          "href": "/radio_group"
+          "href": "/naked/radio_group"
         },
         {
           "title": "NakedSelect",
-          "href": "/select"
+          "href": "/naked/select"
         },
         {
           "title": "NakedSlider",
-          "href": "/slider"
+          "href": "/naked/slider"
         },
         {
           "title": "NakedTabs",
-          "href": "/tabs"
+          "href": "/naked/tabs"
         },
         {
           "title": "NakedTextField",
-          "href": "/textfield"
+          "href": "/naked/textfield"
         },
         {
           "title": "NakedTooltip",
-          "href": "/tooltip"
+          "href": "/naked/tooltip"
         }
       ]
     }
   ]
-  }
+}
