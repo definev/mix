@@ -532,7 +532,9 @@ void main() {
   });
 
   group('Nested Style', () {
-    test('merging a nested empty style should not alter the parent style attributes', () {
+    test(
+        'merging a nested empty style should not alter the parent style attributes',
+        () {
       final sut = Style(
         attribute1,
         Style(null),

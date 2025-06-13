@@ -140,8 +140,22 @@ final class BorderRadiusDirectionalDto
 extension BorderRadiusGeometryMixExt on BorderRadiusGeometry {
   BorderRadiusGeometryDto toDto() {
     final self = this;
-    if (self is BorderRadius) return self.toDto();
-    if (self is BorderRadiusDirectional) return self.toDto();
+    if (self is BorderRadius) {
+      return BorderRadiusDto(
+        topLeft: self.topLeft,
+        topRight: self.topRight,
+        bottomLeft: self.bottomLeft,
+        bottomRight: self.bottomRight,
+      );
+    }
+    if (self is BorderRadiusDirectional) {
+      return BorderRadiusDirectionalDto(
+        topStart: self.topStart,
+        topEnd: self.topEnd,
+        bottomStart: self.bottomStart,
+        bottomEnd: self.bottomEnd,
+      );
+    }
 
     throw MixError.unsupportedTypeInDto(
       BorderRadiusGeometry,
