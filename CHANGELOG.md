@@ -32,6 +32,7 @@ Packages with dependency updates only:
 
 #### `mix` - `v1.7.0`
 
+ - **REFACTOR**: Remove SpecConfiguration and SpecStyle from environment (#656)
  - **REFACTOR**: Move widget state handling from MixBuilder to SpecBuilder (#651).
  - **REFACTOR**: Rename WidgetModifiersData to WidgetModifiersConfig (#649).
  - **REFACTOR**: Fix deprecations and modernize codebase (#647).
