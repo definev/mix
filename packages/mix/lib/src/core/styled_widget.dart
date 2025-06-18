@@ -15,14 +15,14 @@ import 'widget_state/widget_state_controller.dart';
 abstract class StyledWidget extends StatelessWidget {
   /// Creates a styled widget.
   const StyledWidget({
-    Style? style,
+    BaseStyle? style,
     super.key,
     this.inherit = false,
     required this.orderOfModifiers,
   }) : style = style ?? const Style.empty();
 
   /// The style to apply to this widget.
-  final Style style;
+  final BaseStyle style;
 
   /// Whether to inherit style from the nearest [StyledWidget] ancestor.
   final bool inherit;
@@ -92,7 +92,7 @@ class SpecBuilder extends StatefulWidget {
   final WidgetStatesController? controller;
 
   /// Style to apply to the widget.
-  final Style style;
+  final BaseStyle style;
 
   /// Whether to inherit style from parent widgets.
   final bool inherit;
@@ -124,6 +124,18 @@ class _SpecBuilderState extends State<SpecBuilder> {
     _controller = widget.controller ?? WidgetStatesController();
   }
 
+  Style _convertToStyle(BaseStyle style) {
+    if (style is AnimatedStyle) {
+      return style;
+    }
+
+    if (style is Style) {
+      return style;
+    }
+
+    return Style(style);
+  }
+
   @override
   void dispose() {
     // Only dispose controllers we created internally
@@ -136,7 +148,7 @@ class _SpecBuilderState extends State<SpecBuilder> {
   @override
   Widget build(BuildContext context) {
     final builder = MixBuilder(
-      style: widget.style,
+      style: _convertToStyle(widget.style),
       builder: widget.builder,
       inherit: widget.inherit,
       orderOfModifiers: widget.orderOfModifiers,

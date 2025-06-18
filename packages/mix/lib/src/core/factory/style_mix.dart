@@ -12,6 +12,12 @@ import '../spec.dart';
 import '../variant.dart';
 import 'mix_data.dart';
 
+sealed class BaseStyle<T extends SpecAttribute> extends StyleElement {
+  const BaseStyle();
+  AttributeMap<T> get styles;
+  AttributeMap<VariantAttribute> get variants;
+}
+
 /// A utility class for managing a collection of styling attributes and variants.
 ///
 /// The `Style` class is used to encapsulate a set of styling attributes and
@@ -24,11 +30,11 @@ import 'mix_data.dart';
 /// final style = Style(attribute1, attribute2, attribute3);
 /// final updatedStyle = style.variant(myVariant);
 /// ```
-class Style extends StyleElement {
-  /// Visual attributes contained in this mix.
+class Style extends BaseStyle<SpecAttribute> {
+  @override
   final AttributeMap<SpecAttribute> styles;
 
-  /// The variant attributes contained in this mix.
+  @override
   final AttributeMap<VariantAttribute> variants;
 
   /// A constant, empty mix for use with const constructor widgets.
@@ -39,6 +45,13 @@ class Style extends StyleElement {
         variants = const AttributeMap.empty();
 
   const Style._({required this.styles, required this.variants});
+
+  /// Creates a new `Style` instance from a [BaseStyle].
+  ///
+  /// This factory constructor creates a new `Style` instance from a [BaseStyle] instance.
+  /// If the [BaseStyle] is an [AnimatedStyle], it creates an [AnimatedStyle] instance.
+  /// If the [BaseStyle] is a [Style], it returns the [Style] instance.
+  /// Otherwise, it creates a new [Style] instance with the styles and variants from the [BaseStyle].
 
   /// Creates a new `Style` instance with a specified list of [StyleElement]s.
   ///
@@ -106,14 +119,8 @@ class Style extends StyleElement {
           styleList.add(element);
         case VariantAttribute():
           applyVariants.add(element);
-        case SpecUtility():
-          if (element.attributeValue != null) {
-            final nestedStyle = Style.create([element.attributeValue!]);
-            styleList.addAll(nestedStyle.styles.values);
-            applyVariants.addAll(nestedStyle.variants.values);
-          }
-        case Style():
-          // Handle nested Style instances by flattening them
+
+        case BaseStyle():
           styleList.addAll(element.styles.values);
           applyVariants.addAll(element.variants.values);
         default:
@@ -428,4 +435,48 @@ class AnimatedStyle extends Style {
       animated: animated,
     );
   }
+}
+
+abstract class SpecUtility<T extends SpecAttribute, V> extends BaseStyle<T> {
+  @protected
+  @visibleForTesting
+  final T Function(V) attributeBuilder;
+
+  @override
+  AttributeMap<T> styles = AttributeMap<T>.empty();
+
+  @override
+  AttributeMap<VariantAttribute> variants = const AttributeMap.empty();
+
+  SpecUtility(
+    this.attributeBuilder, {
+    @Deprecated(
+      'mutable parameter is no longer used. All SpecUtilities are now mutable by default.',
+    )
+    bool? mutable,
+  });
+
+  static T selfBuilder<T>(T value) => value;
+  T? get attributeValue => styles.attributeOfType();
+
+  T builder(V v) {
+    final attribute = attributeBuilder(v);
+    // Always mutable - accumulate state in attributeValue
+    styles = styles.merge(AttributeMap([attribute]));
+
+    return attribute;
+  }
+
+  T only();
+
+  @override
+  SpecUtility<T, V> merge(covariant SpecUtility<T, V> other) {
+    styles = styles.merge(other.styles);
+    variants = variants.merge(other.variants);
+
+    return this;
+  }
+
+  @override
+  get props => [attributeValue];
 }
