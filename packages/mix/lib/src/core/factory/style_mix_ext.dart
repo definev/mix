@@ -34,9 +34,9 @@ class _AlwaysTrueContextVariant extends ContextVariant {
 }
 
 class SpecUtilityContextVariantUtility<T extends SpecAttribute, V> {
-  final void Function(AttributeMap<VariantAttribute>) addContextVariant;
+  final void Function(AttributeMap<VariantAttribute>) _addContextVariant;
 
-  const SpecUtilityContextVariantUtility._(this.addContextVariant);
+  const SpecUtilityContextVariantUtility._(this._addContextVariant);
 
   /// Adds a context variant with a style builder function.
   ///
@@ -45,7 +45,7 @@ class SpecUtilityContextVariantUtility<T extends SpecAttribute, V> {
   void _on(ContextVariant variant, SpecUtility<T, V> Function() styleBuilder) {
     final map =
         AttributeMap([VariantAttribute(variant, Style(styleBuilder()))]);
-    addContextVariant(map);
+    _addContextVariant(map);
   }
 
   /// Adds a context-dependent style that adapts based on BuildContext.
@@ -60,7 +60,7 @@ class SpecUtilityContextVariantUtility<T extends SpecAttribute, V> {
       (context) => Style(styleBuilder(context)),
       const _AlwaysTrueContextVariant(),
     );
-    addContextVariant(AttributeMap([attribute]));
+    _addContextVariant(AttributeMap([attribute]));
   }
 
   /// Applies styles when the widget is hovered.
