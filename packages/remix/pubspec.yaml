@@ -2,9 +2,8 @@ name: remix
 description: Completely unstyled, widgets designed to integrate with Mix
 repository: https://github.com/btwld/mix/tree/main/packages/remix
 homepage: https://www.fluttermix.com/
-publish_to: none
 
-version: 0.0.4+2
+version: 0.1.0-beta.0
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -15,8 +14,7 @@ dependencies:
     sdk: flutter
   mix: ^1.7.0-beta.0
   mix_annotations: ^1.7.0-beta.0
-  naked:
-    path: ../naked
+  naked: ^0.1.0-beta.0
   meta: ^1.15.0
 
 dev_dependencies:
