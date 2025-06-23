@@ -88,7 +88,10 @@ jobs:
         packages_with_versions=""
 
         if [ "${{ github.event.inputs.mix_version }}" != "" ]; then
-          packages_with_versions="$packages_with_versions -V mix:${{ github.event.inputs.mix_version }} -V mix_lint:${{ github.event.inputs.mix_version }} -V mix_annotations:${{ github.event.inputs.mix_version }} -V mix_generator:${{ github.event.inputs.mix_version }}"
+          packages_with_versions="$packages_with_versions -V mix:${{ github.event.inputs.mix_version }}"
+          packages_with_versions="$packages_with_versions -V mix_lint:${{ github.event.inputs.mix_version }}"
+          packages_with_versions="$packages_with_versions -V mix_annotations:${{ github.event.inputs.mix_version }}"
+          packages_with_versions="$packages_with_versions -V mix_generator:${{ github.event.inputs.mix_version }}"
         fi
         if [ "${{ github.event.inputs.remix }}" != "" ]; then
           packages_with_versions="$packages_with_versions -V remix:${{ github.event.inputs.remix }}"
