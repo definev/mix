@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## 2025-06-17
+## 2025-06-23
 
 ### Changes
 
@@ -15,18 +15,12 @@ Packages with breaking changes:
 
 Packages with other changes:
 
- - [`mix` - `v1.7.0-beta.0`](#mix---v170)
- - [`mix_annotations` - `v0.4.1`](#mix_annotations---v041)
- - [`mix_generator` - `v0.4.1`](#mix_generator---v041)
- - [`mix_lint` - `v0.1.4`](#mix_lint---v014)
- - [`naked` - `v0.0.1-dev.1`](#naked---v001-dev1)
- - [`remix` - `v0.0.4+2`](#remix---v0042)
-
-Packages with dependency updates only:
-
-> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
-
- - `remix` - `v0.0.4+2`
+ - [`mix` - `v1.7.0-beta.0`](#mix---v170-beta0)
+ - [`mix_lint` - `v1.7.0-beta.0`](#mix_lint---v170-beta0)
+ - [`mix_annotations` - `v1.7.0-beta.0`](#mix_annotations---v170-beta0)
+ - [`mix_generator` - `v1.7.0-beta.0`](#mix_generator---v170-beta0)
+ - [`naked` - `v0.1.0-beta.0`](#naked---v010-beta0)
+ - [`remix` - `v0.1.0-beta.0`](#remix---v010-beta0)
 
 ---
 
@@ -51,11 +45,15 @@ Packages with dependency updates only:
  - **FEAT**: Add utilities for animatedData (#660).
  - **FEAT**: Add focused style classes for spec utilities (#677)
 
-#### `mix_annotations` - `v0.4.1`
+#### `mix_lint` - `v1.7.0-beta.0`
 
- - **FEAT**: Add generated style-focused modifiers and specs (#652).
+ - No changes in this release.
 
-#### `mix_generator` - `v0.4.1`
+#### `mix_annotations` - `v1.7.0-beta.0`
+
+- **FEAT**: Add generated style-focused modifiers and specs (#652).
+
+#### `mix_generator` - `v1.7.0-beta.0`
 
  - **REFACTOR**: Rename WidgetModifiersData to WidgetModifiersConfig (#649).
  - **REFACTOR**: Fix deprecations and modernize codebase (#647).
@@ -64,11 +62,7 @@ Packages with dependency updates only:
  - **FEAT**: unify SpecUtility, Style, and Attributes as compatible values (#643).
  - **FEAT**: builder optimization (#629).
 
-#### `mix_lint` - `v0.1.4`
-
- - No changes in this release.
-
-#### `naked` - `v0.0.1-dev.1`
+#### `naked` - `v0.1.0-beta.0`
 
  - **REFACTOR**: Select (#596).
  - **REFACTOR**: Tabs and Tooltip (#595).
@@ -88,6 +82,7 @@ Packages with dependency updates only:
  - **DOCS**: Remove old example app (#607).
  - **DOCS**: Document naked button (#599).
 
+####
 
 ## 2025-03-31
 

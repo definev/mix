@@ -1,4 +1,4 @@
-## 0.0.1-beta.1
+## 0.1.0-beta.0
 
  - **REFACTOR**: NakedSelect (#596).
  - **REFACTOR**: NakedTabs and NakedTooltip (#595).
