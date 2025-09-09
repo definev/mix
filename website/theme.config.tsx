@@ -27,15 +27,15 @@ const themeConfig = {
   project: {
     link: "https://github.com/btwld/mix",
   },
-  // banner: {
-  //   key: "1.0-beta-doc-wip-notice",
-  //   dismissible: false,
-  //   text: (
-  //     <a href={`${siteUrl}`} target="_blank">
-  //       Mix 1.0 is in Beta. Documentation is currently a work-in-progress →
-  //     </a>
-  //   ),
-  // },
+  banner: {
+    key: "2.0-beta-doc-wip-notice",
+    dismissible: false ,
+    text: (
+      <a href="https://mix-docs-gosljkd74-fluttertools.vercel.app" target="_blank">
+        This is the Mix 2.0-alpha docs (in progress). For the latest stable version, click here.
+      </a>
+    ),
+  },
   docsRepositoryBase: "https://github.com/btwld/mix/blob/main/website",
   search: {
     component: <CustomSearch />,

@@ -3,7 +3,7 @@ const VersionSelector = () => {
         const newVersion = event.target.value;
 
         if (newVersion === '1.7') {
-            window.location.href = 'mix-docs-gosljkd74-fluttertools.vercel.app';
+            window.location.href = 'https://mix-docs-gosljkd74-fluttertools.vercel.app';
         } else if (newVersion === '2.0') {
             window.location.href = '/';
         }
