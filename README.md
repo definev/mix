@@ -77,8 +77,8 @@ Mix solves these by giving you a dedicated styling layer that stays consistent a
 
 ### Prerequisites
 
-- **Dart SDK**: 3.11.0 or higher
-- **Flutter**: 3.41.0 or higher
+- **Dart SDK**: 3.12.0 or higher
+- **Flutter**: 3.44.0 or higher
 
 ### Installation
 
@@ -225,6 +225,13 @@ Directives transform values (text casing, number scaling, color adjustments) at 
 | [mix_generator](packages/mix_generator) | build_runner generator for specs |
 | [mix_lint](packages/mix_lint) | Custom linter rules |
 | [mix_winds](packages/mix_winds) | Utility-first styling inspired by Tailwind CSS |
+
+## Examples
+
+- [Mix showcase](examples/showcase): a Remix-powered catalog of core
+  widgets, responsive layouts, 30 copyable interaction demos, and charts.
+
+See [example workspace setup](examples) for Melos, dependencies, and web builds.
 
 ## Documentation
 

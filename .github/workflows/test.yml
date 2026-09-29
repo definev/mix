@@ -70,6 +70,27 @@ jobs:
       - name: Test
         run: melos run ci
 
+  hosted-examples:
+    name: Examples / Published Mix
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: examples/showcase
+    steps:
+      - uses: actions/checkout@v4
+      - uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config-action
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
+      # Deliberately omit Melos: apps must also work with published Mix.
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build web
+
   winds-release:
     name: Winds / Release dependency check
     runs-on: ubuntu-latest
