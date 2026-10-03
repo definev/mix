@@ -19,6 +19,97 @@ Widget styleAnimationBuilderCapturingColor(
 
 void main() {
   group('AnimationStyleWidget', () {
+    testWidgets('static updates apply immediately with a stopped listenable', (
+      tester,
+    ) async {
+      Color? capturedColor;
+      for (final color in [
+        Colors.red,
+        Colors.blue,
+        Colors.blue,
+        Colors.green,
+      ]) {
+        await tester.pumpWidget(
+          styleAnimationBuilderCapturingColor(
+            StyleSpec(spec: TestSpec(color: color)),
+            (resolved) => capturedColor = resolved,
+          ),
+        );
+
+        expect(capturedColor, color);
+        expect(
+          find.descendant(
+            of: find.byType(StyleAnimationBuilder<TestSpec>),
+            matching: find.byType(AnimatedBuilder),
+          ),
+          findsOneWidget,
+        );
+        expect(tester.hasRunningAnimations, isFalse);
+      }
+      await tester.pumpWidget(const SizedBox());
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('retains descendant state when toggling animation', (
+      tester,
+    ) async {
+      const childKey = Key('stateful-child');
+      const config = CurveAnimationConfig(
+        duration: Duration(milliseconds: 100),
+        curve: Curves.linear,
+      );
+      State? childState;
+
+      for (final animation in [null, config, null, null, config, null]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: StyleAnimationBuilder<TestSpec>(
+              spec: StyleSpec(
+                spec: TestSpec(
+                  color: animation == null ? Colors.red : Colors.blue,
+                ),
+                animation: animation,
+              ),
+              builder: (_, _) => StatefulBuilder(
+                key: childKey,
+                builder: (_, _) => const SizedBox(),
+              ),
+            ),
+          ),
+        );
+        childState ??= tester.state(find.byKey(childKey));
+        expect(tester.state(find.byKey(childKey)), same(childState));
+        await tester.pumpAndSettle();
+      }
+    });
+
+    testWidgets('enables animation after a static spec', (tester) async {
+      Color? capturedColor;
+      await tester.pumpWidget(
+        styleAnimationBuilderCapturingColor(
+          const StyleSpec(spec: TestSpec(color: Colors.red)),
+          (color) => capturedColor = color,
+        ),
+      );
+      await tester.pumpWidget(
+        styleAnimationBuilderCapturingColor(
+          const StyleSpec(
+            spec: TestSpec(color: Colors.blue),
+            animation: CurveAnimationConfig(
+              duration: Duration(milliseconds: 200),
+              curve: Curves.linear,
+            ),
+          ),
+          (color) => capturedColor = color,
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(capturedColor, Color.lerp(Colors.red, Colors.blue, 0.5));
+      await tester.pumpAndSettle();
+      expect(capturedColor, Colors.blue);
+    });
+
     testWidgets('builds with initial style', (tester) async {
       const animationConfig = CurveAnimationConfig(
         duration: Duration(milliseconds: 100),
@@ -411,8 +502,14 @@ void main() {
         expect(tester.hasRunningAnimations, isFalse);
         expect(boxColor(tester), Colors.blue);
 
+        await tester.pumpWidget(
+          MaterialApp(home: Box(style: BoxStyler().color(Colors.yellow))),
+        );
+        expect(tester.hasRunningAnimations, isFalse);
+        expect(boxColor(tester), Colors.yellow);
+
         await tester.pump(const Duration(milliseconds: 500));
-        expect(boxColor(tester), Colors.blue);
+        expect(boxColor(tester), Colors.yellow);
       });
 
       testWidgets('stops a looping phase animation', (tester) async {

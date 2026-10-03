@@ -32,18 +32,23 @@ class StyleAnimationBuilder<S extends Spec<S>> extends StatefulWidget {
 class _StyleAnimationBuilderState<S extends Spec<S>>
     extends State<StyleAnimationBuilder<S>>
     with TickerProviderStateMixin {
-  late StyleAnimationDriver<S> animationDriver;
+  StyleAnimationDriver<S>? _animationDriver;
 
   @override
   void initState() {
     super.initState();
     final spec = widget.spec;
     final config = spec.animation;
-    animationDriver = _createAnimationDriver(config: config, initialSpec: spec);
+    if (config != null) {
+      _animationDriver = _createAnimationDriver(
+        config: config,
+        initialSpec: spec,
+      );
+    }
   }
 
   StyleAnimationDriver<S> _createAnimationDriver({
-    required AnimationConfig? config,
+    required AnimationConfig config,
     required StyleSpec<S> initialSpec,
   }) {
     return switch (config) {
@@ -73,8 +78,6 @@ class _StyleAnimationBuilderState<S extends Spec<S>>
         initialSpec: initialSpec,
         context: context,
       ),
-      // ignore: avoid-undisposed-instances
-      null => NoAnimationDriver(vsync: this, initialSpec: initialSpec),
     };
   }
 
@@ -93,7 +96,7 @@ class _StyleAnimationBuilderState<S extends Spec<S>>
 
   @override
   void dispose() {
-    animationDriver.dispose();
+    _animationDriver?.dispose();
     super.dispose();
   }
 
@@ -105,26 +108,33 @@ class _StyleAnimationBuilderState<S extends Spec<S>>
     final oldConfig = oldWidget.spec.animation;
 
     if ((oldConfig.runtimeType == config.runtimeType) && config != null) {
-      animationDriver.updateDriver(config);
+      _animationDriver!.updateDriver(config);
     } else {
-      animationDriver.dispose();
-      animationDriver = _createAnimationDriver(
-        config: config ?? _fallbackConfig(oldConfig),
-        initialSpec: oldWidget.spec,
-      );
+      _animationDriver?.dispose();
+      final effectiveConfig = config ?? _fallbackConfig(oldConfig);
+      _animationDriver = effectiveConfig == null
+          ? null
+          : _createAnimationDriver(
+              config: effectiveConfig,
+              initialSpec: oldWidget.spec,
+            );
     }
 
-    if (oldWidget.spec != widget.spec) {
-      animationDriver.didUpdateSpec(oldWidget.spec, widget.spec);
+    final driver = _animationDriver;
+    if (driver != null && oldWidget.spec != widget.spec) {
+      driver.didUpdateSpec(oldWidget.spec, widget.spec);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final driver = _animationDriver;
+    // Keep the same element structure when animation is toggled so descendants
+    // retain their state. Static styles need only a shared, stopped listenable.
     return AnimatedBuilder(
-      animation: animationDriver.animation,
+      animation: driver?.animation ?? const AlwaysStoppedAnimation<double>(0),
       builder: (context, child) {
-        final currentSpec = animationDriver.animation.value ?? widget.spec;
+        final currentSpec = driver?.animation.value ?? widget.spec;
 
         return widget.builder(context, currentSpec);
       },

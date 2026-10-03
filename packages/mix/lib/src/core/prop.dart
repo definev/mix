@@ -6,6 +6,7 @@ import '../theme/tokens/token_refs.dart';
 import 'converter_registry.dart';
 import 'directive.dart';
 import 'helpers.dart';
+import 'internal/prop_sources.dart';
 import 'mix_element.dart';
 import 'prop_source.dart';
 import 'style.dart';
@@ -191,7 +192,7 @@ class Prop<V> {
 
     // Always accumulate all sources - no conditional logic
     return Prop._(
-      sources: [...sources, ...other.sources],
+      sources: concatPropSources(sources, other.sources),
       directives: PropOps.mergeDirectives($directives, other.$directives),
     );
   }
@@ -212,6 +213,21 @@ class Prop<V> {
   V resolveProp(BuildContext context) {
     if (sources.isEmpty) {
       throw FlutterError('Prop<$V> has no sources');
+    }
+
+    // Most properties have only one source. Resolve it without allocating the
+    // temporary lists needed for conversion and accumulation of multiple sources.
+    if (sources.length == 1) {
+      final value = switch (sources.single) {
+        ValueSource<V>(:final value) => value,
+        TokenSource<V>(:final token) => token.resolve(context),
+        MixSource<V>(:final mix) => mix,
+      };
+      final resolvedValue = value is Mix<V>
+          ? _resolveMix(context, value)
+          : value as V;
+
+      return PropOps.applyDirectives(resolvedValue, $directives);
     }
 
     // Resolve all sources to values
@@ -270,18 +286,7 @@ class Prop<V> {
         for (int i = 1; i < mixValues.length; i++) {
           mergedMix = PropOps.mergeMixes(context, mergedMix, mixValues[i]);
         }
-        // A [Style] nested inside another [Style]'s [Prop] (e.g. a component
-        // sub-style) carries its own context variants — widget states
-        // (hovered/pressed/disabled), brightness, breakpoints, etc. Those are
-        // applied by [Style.build], not by [Style.resolve], so resolving a
-        // nested style directly would silently drop them. Build styles instead
-        // so their variants resolve against the current context.
-        //
-        // Named variants are not propagated here (build uses the default empty
-        // set), matching how the top-level StyleBuilder builds styles.
-        resolvedValue = mergedMix is Style
-            ? (mergedMix as Style).build(context) as V
-            : mergedMix.resolve(context);
+        resolvedValue = _resolveMix(context, mergedMix);
       }
     } else {
       // Simple values - use last one (replacement strategy)
@@ -290,6 +295,14 @@ class Prop<V> {
 
     // Apply directives
     return PropOps.applyDirectives(resolvedValue, $directives);
+  }
+
+  V _resolveMix(BuildContext context, Mix<V> mix) {
+    // Nested styles must build their context variants before resolving. Named
+    // variants remain local, just as they do in the top-level StyleBuilder.
+    return mix is Style
+        ? (mix as Style).build(context) as V
+        : mix.resolve(context);
   }
 
   // Equality and debugging
